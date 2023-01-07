@@ -1,5 +1,4 @@
 import turtle
-# 400 by 300 unit screen with wn.screensize()
 # Sets direction and cartesian positions for next turtles
 def style_turtle(t, x, y):
   t.hideturtle()
@@ -19,12 +18,13 @@ def drawMain(t, l):
   t.right(120)
   t.forward(l)
 
-def drawInverted(t, l):
+def drawInverted(t, l, colorIndex):
   # given a triangle any triangle
   # draw an inverted triangle within it
   # to get the inverted triangle within others you must use recursion
   # I idea I have is to create 3 turtles at 3 key points to continue the drawing. Since recursion we should set a limit
   # Until the recursion stack stops, this base case will be when the turtles will stop
+  arr = ['blue','red','yellow']
   if (l <= 5):
     return
   else:
@@ -34,7 +34,12 @@ def drawInverted(t, l):
     a = turtle.Turtle()
     a = style_turtle(a, t.xcor(), t.ycor())
     t.forward(l)
-    
+
+    if (colorIndex > len(arr) - 1):
+      colorIndex = 0
+    t.color(arr[colorIndex])
+
+
     #Place top turtle here
     b = turtle.Turtle()
     b = style_turtle(b, t.xcor(), t.ycor())
@@ -52,9 +57,13 @@ def drawInverted(t, l):
     # Probably have to finished the drawing, and then multiplication can begin; though test first
     # Hides current turtle and gives show to the next turtles
     # Start stack for bottom left
-    drawInverted(a, l/2)
-    drawInverted(b, l/2)
-    drawInverted(c, l/2)
+    print("Drawing Bottom left")
+    drawInverted(a, l/2, colorIndex + 1)
+
+    print("Drawing top")
+    drawInverted(b, l/2, colorIndex + 1)
+    print("Drawing bottom right")
+    drawInverted(c, l/2, colorIndex + 1)
     return
 
 def main():
@@ -77,6 +86,6 @@ def main():
   drawMain(alyx, length)
   alyx.setheading(60)
   
-  drawInverted(alyx, length/2)
+  drawInverted(alyx, length/2, 0)
   wn.exitonclick()
 main()
